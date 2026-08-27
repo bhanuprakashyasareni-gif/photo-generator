@@ -1,9 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>AI Photo Generator</title>
 
@@ -14,72 +18,125 @@
 
   <main class="container">
 
-    <section class="card">
+    <div class="card">
 
-      <h1>? Create Your Image</h1>
+      <h1>📸 Create Your Image</h1>
 
       <p class="subtitle">
         Upload two photos and we'll create your image.
       </p>
 
+
       <form id="uploadForm">
 
-        <label for="name">Your Name</label>
+        <!-- NAME -->
+
+        <label for="name">
+          Your Name
+        </label>
+
         <input
-          type="text"
           id="name"
+          type="text"
           placeholder="Enter your name"
           required
+          maxlength="100"
         >
 
-        <label for="email">Your Email</label>
+
+        <!-- EMAIL -->
+
+        <label for="email">
+          Your Email
+        </label>
+
         <input
-          type="email"
           id="email"
-          placeholder="you@example.com"
+          type="email"
+          placeholder="Enter your email"
           required
+          maxlength="200"
         >
 
+
+        <!-- PHOTO 1 -->
+
         <div class="photo-box">
-          <label for="photo1">?? Photo 1</label>
+
+          <h2>📷 Photo 1</h2>
 
           <input
-            type="file"
             id="photo1"
+            type="file"
             accept="image/jpeg,image/png,image/webp"
             required
           >
 
-          <div id="preview1" class="preview"></div>
+          <div
+            id="preview1"
+            class="preview"
+          ></div>
+
         </div>
+
+
+        <!-- PHOTO 2 -->
 
         <div class="photo-box">
-          <label for="photo2">?? Photo 2</label>
+
+          <h2>📷 Photo 2</h2>
 
           <input
-            type="file"
             id="photo2"
+            type="file"
             accept="image/jpeg,image/png,image/webp"
             required
           >
 
-          <div id="preview2" class="preview"></div>
+          <div
+            id="preview2"
+            class="preview"
+          ></div>
+
         </div>
 
-        <button type="submit" id="submitButton">
-          Generate My Image
+
+        <!-- BUTTON -->
+
+        <button
+          id="submitButton"
+          type="submit"
+        >
+          Upload My Photos
         </button>
+
+
+        <!-- MESSAGE -->
+
+        <div
+          id="message"
+          class="message"
+        ></div>
+
+        <p class="limit">
+          Each photo must be smaller than 6 MB.
+        </p>
 
       </form>
 
-      <div id="message" class="message"></div>
-
-    </section>
+    </div>
 
   </main>
 
+
+  <!-- SUPABASE -->
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- OUR JAVASCRIPT -->
+
   <script src="app.js"></script>
 
 </body>
+
 </html>
