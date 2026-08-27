@@ -1,44 +1,46 @@
-
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  min-height: 100vh;
-
   font-family: Arial, sans-serif;
-
   background: #f5f5f5;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  padding: 20px;
+  color: #111;
 }
 
 .container {
   width: 100%;
-  max-width: 520px;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  padding: 40px 15px;
 }
 
 .card {
-  background: white;
+  width: 100%;
+  max-width: 680px;
 
-  padding: 32px;
+  background: white;
 
   border-radius: 20px;
 
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  padding: 35px;
+
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.08);
 }
 
 h1 {
-  margin-top: 0;
-
   text-align: center;
 
-  font-size: 30px;
+  font-size: 34px;
+
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
 .subtitle {
@@ -46,45 +48,58 @@ h1 {
 
   color: #666;
 
-  margin-bottom: 30px;
+  margin-bottom: 35px;
 }
 
 label {
   display: block;
 
-  font-weight: 600;
+  font-size: 17px;
+
+  font-weight: bold;
 
   margin-bottom: 8px;
 }
 
 input[type="text"],
-input[type="email"],
-input[type="file"] {
+input[type="email"] {
   width: 100%;
 
-  padding: 12px;
-
-  margin-bottom: 20px;
+  padding: 15px;
 
   border: 1px solid #ddd;
 
   border-radius: 10px;
 
-  font-size: 15px;
+  font-size: 16px;
+
+  margin-bottom: 25px;
 }
 
 .photo-box {
-  margin-top: 10px;
-
-  padding: 18px;
-
   border: 2px dashed #ddd;
 
-  border-radius: 14px;
+  border-radius: 15px;
+
+  padding: 20px;
+
+  margin-bottom: 25px;
+}
+
+.photo-box h2 {
+  margin-top: 0;
+
+  font-size: 20px;
+}
+
+input[type="file"] {
+  width: 100%;
+
+  font-size: 16px;
 }
 
 .preview {
-  margin-top: 10px;
+  margin-top: 20px;
 
   text-align: center;
 }
@@ -92,19 +107,19 @@ input[type="file"] {
 .preview img {
   max-width: 100%;
 
-  max-height: 250px;
+  max-height: 350px;
 
-  border-radius: 10px;
+  border-radius: 12px;
+
+  object-fit: contain;
 }
 
 button {
   width: 100%;
 
-  margin-top: 20px;
+  padding: 18px;
 
-  padding: 15px;
-
-  border: none;
+  border: 0;
 
   border-radius: 12px;
 
@@ -112,15 +127,15 @@ button {
 
   color: white;
 
-  font-size: 17px;
+  font-size: 18px;
 
-  font-weight: 600;
+  font-weight: bold;
 
   cursor: pointer;
 }
 
 button:hover {
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 button:disabled {
@@ -134,6 +149,15 @@ button:disabled {
 
   text-align: center;
 
-  font-weight: 600;
+  font-weight: bold;
+
+  min-height: 24px;
 }
 
+.limit {
+  text-align: center;
+
+  font-weight: bold;
+
+  margin-top: 20px;
+}
