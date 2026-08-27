@@ -1,5 +1,5 @@
 // ==========================================
-// SUPABASE
+// SUPABASE CONNECTION
 // ==========================================
 
 const SUPABASE_URL =
@@ -8,23 +8,38 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_gsURgAJTcUZTlZ7LwF-BJg_1Wk75nMO";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
 
 
 // ==========================================
-// ELEMENTS
+// HTML ELEMENTS
 // ==========================================
 
-const form = document.getElementById("uploadForm");
+const form =
+  document.getElementById("uploadForm");
 
-const photo1 = document.getElementById("photo1");
-const photo2 = document.getElementById("photo2");
+const nameInput =
+  document.getElementById("name");
 
-const preview1 = document.getElementById("preview1");
-const preview2 = document.getElementById("preview2");
+const emailInput =
+  document.getElementById("email");
+
+const photo1Input =
+  document.getElementById("photo1");
+
+const photo2Input =
+  document.getElementById("photo2");
+
+const preview1 =
+  document.getElementById("preview1");
+
+const preview2 =
+  document.getElementById("preview2");
 
 const submitButton =
   document.getElementById("submitButton");
@@ -34,45 +49,62 @@ const message =
 
 
 // ==========================================
-// PHOTO PREVIEW
+// PREVIEW FUNCTION
 // ==========================================
 
-function showPreview(input, preview) {
+function createPreview(input, preview) {
 
-  input.addEventListener("change", () => {
+  input.addEventListener("change", function () {
+
+    preview.innerHTML = "";
 
     const file = input.files[0];
 
     if (!file) {
-      preview.innerHTML = "";
       return;
     }
 
-    const imageURL =
+    const image =
+      document.createElement("img");
+
+    image.src =
       URL.createObjectURL(file);
 
-    preview.innerHTML = `
-      <img
-        src="${imageURL}"
-        alt="Selected photo"
-      >
-    `;
+    image.alt =
+      "Selected photo";
+
+    preview.appendChild(image);
+
   });
 }
 
-showPreview(photo1, preview1);
-showPreview(photo2, preview2);
+
+createPreview(photo1Input, preview1);
+
+createPreview(photo2Input, preview2);
 
 
 // ==========================================
-// VALIDATE IMAGE
+// SHOW MESSAGE
 // ==========================================
 
-function validateImage(file) {
+function showMessage(text) {
+
+  message.textContent = text;
+}
+
+
+// ==========================================
+// VALIDATE PHOTO
+// ==========================================
+
+function validatePhoto(file) {
 
   if (!file) {
+
     return "Please select both photos.";
   }
+
 
   const allowedTypes = [
     "image/jpeg",
@@ -80,328 +112,340 @@ function validateImage(file) {
     "image/webp"
   ];
 
+
   if (!allowedTypes.includes(file.type)) {
-    return "Only JPG, PNG, and WEBP images are allowed.";
+
+    return "Please use JPG, PNG, or WEBP.";
   }
 
-  const maxSize = 6 * 1024 * 1024;
+
+  const maxSize =
+    6 * 1024 * 1024;
+
 
   if (file.size > maxSize) {
+
     return "Each photo must be smaller than 6 MB.";
   }
+
 
   return null;
 }
 
 
 // ==========================================
-// SUBMIT
+// FORM SUBMIT
 // ==========================================
 
-form.addEventListener("submit", async (event) => {
+form.addEventListener(
+  "submit",
+  async function (event) {
 
-  event.preventDefault();
-
-  console.log("SUBMIT STARTED");
+    event.preventDefault();
 
 
-  try {
+    console.log("========== START ==========");
 
-    // --------------------------------------
-    // USER INFORMATION
-    // --------------------------------------
 
     const name =
-      document.getElementById("name")
-        .value
-        .trim();
+      nameInput.value.trim();
 
     const email =
-      document.getElementById("email")
-        .value
-        .trim();
+      emailInput.value.trim();
 
+    const file1 =
+      photo1Input.files[0];
 
-    const file1 = photo1.files[0];
-    const file2 = photo2.files[0];
+    const file2 =
+      photo2Input.files[0];
 
 
     // --------------------------------------
-    // VALIDATION
+    // CHECK NAME
     // --------------------------------------
 
     if (!name) {
 
-      message.textContent =
-        "Please enter your name.";
+      showMessage(
+        "Please enter your name."
+      );
 
       return;
     }
 
+
+    // --------------------------------------
+    // CHECK EMAIL
+    // --------------------------------------
 
     if (!email) {
 
-      message.textContent =
-        "Please enter your email.";
-
-      return;
-    }
-
-
-    const error1 =
-      validateImage(file1);
-
-    if (error1) {
-
-      message.textContent =
-        error1;
-
-      return;
-    }
-
-
-    const error2 =
-      validateImage(file2);
-
-    if (error2) {
-
-      message.textContent =
-        error2;
+      showMessage(
+        "Please enter your email."
+      );
 
       return;
     }
 
 
     // --------------------------------------
-    // BUTTON
+    // CHECK PHOTO 1
     // --------------------------------------
+
+    const photo1Error =
+      validatePhoto(file1);
+
+    if (photo1Error) {
+
+      showMessage(photo1Error);
+
+      return;
+    }
+
+
+    // --------------------------------------
+    // CHECK PHOTO 2
+    // --------------------------------------
+
+    const photo2Error =
+      validatePhoto(file2);
+
+    if (photo2Error) {
+
+      showMessage(photo2Error);
+
+      return;
+    }
+
 
     submitButton.disabled = true;
 
     submitButton.textContent =
-      "Uploading...";
+      "Uploading photos...";
 
-    message.textContent = "";
-
-
-    // --------------------------------------
-    // CREATE ORDER ID
-    // --------------------------------------
-
-    const orderId =
-      crypto.randomUUID();
-
-    console.log(
-      "Order ID:",
-      orderId
-    );
+    showMessage("");
 
 
-    // --------------------------------------
-    // FILE EXTENSIONS
-    // --------------------------------------
+    try {
 
-    const extension1 =
-      file1.name
-        .split(".")
-        .pop()
-        .toLowerCase();
+      // ====================================
+      // CREATE UNIQUE ORDER ID
+      // ====================================
 
-    const extension2 =
-      file2.name
-        .split(".")
-        .pop()
-        .toLowerCase();
+      const orderId =
+        crypto.randomUUID();
 
 
-    // --------------------------------------
-    // STORAGE PATHS
-    // --------------------------------------
-
-    const photo1Path =
-      `${orderId}/photo1.${extension1}`;
-
-    const photo2Path =
-      `${orderId}/photo2.${extension2}`;
-
-
-    console.log(
-      "Uploading photo 1:",
-      photo1Path
-    );
-
-
-    // ======================================
-    // UPLOAD PHOTO 1
-    // ======================================
-
-    const {
-      data: uploadData1,
-      error: uploadError1
-    } = await supabaseClient
-      .storage
-      .from("userphotos")
-      .upload(
-        photo1Path,
-        file1,
-        {
-          contentType: file1.type,
-          upsert: false
-        }
+      console.log(
+        "Order ID:",
+        orderId
       );
 
 
-    if (uploadError1) {
+      // ====================================
+      // CREATE FILE NAMES
+      // ====================================
+
+      const extension1 =
+        file1.name
+          .split(".")
+          .pop()
+          .toLowerCase();
+
+
+      const extension2 =
+        file2.name
+          .split(".")
+          .pop()
+          .toLowerCase();
+
+
+      const path1 =
+        orderId +
+        "/photo1." +
+        extension1;
+
+
+      const path2 =
+        orderId +
+        "/photo2." +
+        extension2;
+
+
+      // ====================================
+      // UPLOAD PHOTO 1
+      // ====================================
+
+      console.log(
+        "Uploading photo 1..."
+      );
+
+
+      const result1 =
+        await supabaseClient
+          .storage
+          .from("userphotos")
+          .upload(
+            path1,
+            file1,
+            {
+              contentType: file1.type,
+              upsert: false
+            }
+          );
+
+
+      if (result1.error) {
+
+        console.error(
+          "PHOTO 1 ERROR:",
+          result1.error
+        );
+
+        throw new Error(
+          "Photo 1 upload failed: " +
+          result1.error.message
+        );
+      }
+
+
+      console.log(
+        "Photo 1 uploaded!"
+      );
+
+
+      // ====================================
+      // UPLOAD PHOTO 2
+      // ====================================
+
+      console.log(
+        "Uploading photo 2..."
+      );
+
+
+      const result2 =
+        await supabaseClient
+          .storage
+          .from("userphotos")
+          .upload(
+            path2,
+            file2,
+            {
+              contentType: file2.type,
+              upsert: false
+            }
+          );
+
+
+      if (result2.error) {
+
+        console.error(
+          "PHOTO 2 ERROR:",
+          result2.error
+        );
+
+        throw new Error(
+          "Photo 2 upload failed: " +
+          result2.error.message
+        );
+      }
+
+
+      console.log(
+        "Photo 2 uploaded!"
+      );
+
+
+      // ====================================
+      // SAVE DATABASE RECORD
+      // ====================================
+
+      console.log(
+        "Saving order..."
+      );
+
+
+      const result3 =
+        await supabaseClient
+          .from("photo_orders")
+          .insert({
+            id: orderId,
+
+            name: name,
+
+            email: email,
+
+            photo1_path: path1,
+
+            photo2_path: path2,
+
+            status: "uploaded"
+          });
+
+
+      if (result3.error) {
+
+        console.error(
+          "DATABASE ERROR:",
+          result3.error
+        );
+
+        throw new Error(
+          "Database save failed: " +
+          result3.error.message
+        );
+      }
+
+
+      console.log(
+        "DATABASE RECORD SAVED!"
+      );
+
+
+      // ====================================
+      // SUCCESS
+      // ====================================
+
+      showMessage(
+        "✅ Your two photos were uploaded successfully!"
+      );
+
+
+      submitButton.textContent =
+        "Uploaded Successfully";
+
+
+      form.reset();
+
+      preview1.innerHTML = "";
+
+      preview2.innerHTML = "";
+
+
+      console.log(
+        "========== SUCCESS =========="
+      );
+
+
+    } catch (error) {
 
       console.error(
-        "PHOTO 1 ERROR:",
-        uploadError1
+        "UPLOAD FAILED:",
+        error
       );
 
-      throw new Error(
-        "Photo 1 upload failed: " +
-        uploadError1.message
+
+      showMessage(
+        "❌ " + error.message
       );
+
+
+      submitButton.disabled =
+        false;
+
+      submitButton.textContent =
+        "Upload My Photos";
     }
 
-
-    console.log(
-      "Photo 1 uploaded:",
-      uploadData1
-    );
-
-
-    // ======================================
-    // UPLOAD PHOTO 2
-    // ======================================
-
-    console.log(
-      "Uploading photo 2:",
-      photo2Path
-    );
-
-
-    const {
-      data: uploadData2,
-      error: uploadError2
-    } = await supabaseClient
-      .storage
-      .from("userphotos")
-      .upload(
-        photo2Path,
-        file2,
-        {
-          contentType: file2.type,
-          upsert: false
-        }
-      );
-
-
-    if (uploadError2) {
-
-      console.error(
-        "PHOTO 2 ERROR:",
-        uploadError2
-      );
-
-      throw new Error(
-        "Photo 2 upload failed: " +
-        uploadError2.message
-      );
-    }
-
-
-    console.log(
-      "Photo 2 uploaded:",
-      uploadData2
-    );
-
-
-    // ======================================
-    // SAVE ORDER
-    // ======================================
-
-    console.log(
-      "Saving order to database..."
-    );
-
-
-    const {
-      data: orderData,
-      error: databaseError
-    } = await supabaseClient
-      .from("photo_orders")
-      .insert({
-        id: orderId,
-
-        name: name,
-
-        email: email,
-
-        photo1_path: photo1Path,
-
-        photo2_path: photo2Path,
-
-        status: "uploaded"
-      })
-      .select()
-      .single();
-
-
-    if (databaseError) {
-
-      console.error(
-        "DATABASE ERROR:",
-        databaseError
-      );
-
-      throw new Error(
-        "Could not save your order: " +
-        databaseError.message
-      );
-    }
-
-
-    console.log(
-      "ORDER SAVED:",
-      orderData
-    );
-
-
-    // ======================================
-    // SUCCESS
-    // ======================================
-
-    message.textContent =
-      "✅ Photos uploaded successfully!";
-
-    submitButton.textContent =
-      "Submitted";
-
-
-    form.reset();
-
-    preview1.innerHTML = "";
-    preview2.innerHTML = "";
-
-
-  } catch (error) {
-
-    console.error(
-      "FINAL ERROR:",
-      error
-    );
-
-
-    message.textContent =
-      error.message ||
-      "Something went wrong.";
-
-
-    submitButton.disabled = false;
-
-    submitButton.textContent =
-      "Generate My Image";
   }
-
-});
+);
