@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI Photo Generator</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <main class="container">
+
+    <section class="card">
+
+      <h1>? Create Your Image</h1>
+
+      <p class="subtitle">
+        Upload two photos and we'll create your image.
+      </p>
+
+      <form id="uploadForm">
+
+        <label for="name">Your Name</label>
+        <input
+          type="text"
+          id="name"
+          placeholder="Enter your name"
+          required
+        >
+
+        <label for="email">Your Email</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="you@example.com"
+          required
+        >
+
+        <div class="photo-box">
+          <label for="photo1">?? Photo 1</label>
+
+          <input
+            type="file"
+            id="photo1"
+            accept="image/jpeg,image/png,image/webp"
+            required
+          >
+
+          <div id="preview1" class="preview"></div>
+        </div>
+
+        <div class="photo-box">
+          <label for="photo2">?? Photo 2</label>
+
+          <input
+            type="file"
+            id="photo2"
+            accept="image/jpeg,image/png,image/webp"
+            required
+          >
+
+          <div id="preview2" class="preview"></div>
+        </div>
+
+        <button type="submit" id="submitButton">
+          Generate My Image
+        </button>
+
+      </form>
+
+      <div id="message" class="message"></div>
+
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
